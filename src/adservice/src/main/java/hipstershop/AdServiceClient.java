@@ -62,7 +62,7 @@ public class AdServiceClient {
     AdRequest request = AdRequest.newBuilder().addContextKeys(contextKey).build();
     AdResponse response;
 
-    try () {
+    try {
       response = blockingStub.getAds(request);
     } catch (StatusRuntimeException e) {
       logger.log(Level.WARN, "RPC failed: " + e.getStatus());
