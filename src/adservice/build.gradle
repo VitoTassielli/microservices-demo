@@ -37,7 +37,9 @@ dependencies {
                 "io.grpc:grpc-stub:${grpcVersion}",
                 "io.grpc:grpc-netty:${grpcVersion}",
                 "io.grpc:grpc-services:${grpcVersion}",
-                "org.apache.logging.log4j:log4j-core:2.13.0"
+                "org.apache.logging.log4j:log4j-core:2.13.0",
+                "io.netty:netty-transport-native-epoll:4.1.59.Final"
+                "org.slf4j:slf4j-nop:1.7.25"
 
         runtimeOnly "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
                 "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
@@ -93,6 +95,10 @@ task adService(type: CreateStartScripts) {
     applicationName = 'AdService'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
+    defaultJvmOpts =
+            ["-javaagent:opentelemetry-javaagent-all.jar",
+             "-Dotel.traces.exporter=jaeger",
+             "-Dotel.javaagent.debug=true"]
 }
 
 task adServiceClient(type: CreateStartScripts) {
@@ -100,6 +106,10 @@ task adServiceClient(type: CreateStartScripts) {
     applicationName = 'AdServiceClient'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
+    defaultJvmOpts =
+            ["-javaagent:opentelemetry-javaagent-all.jar",
+             "-Dotel.traces.exporter=jaeger",
+             "-Dotel.javaagent.debug=true"]
 }
 
 applicationDistribution.into('bin') {
